@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Lumière Café – Art of Everyday Pleasure</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream: #f7f2ea;
+      --warm-white: #fdfaf5;
+      --gold: #b8954a;
+      --gold-light: #d4b06a;
+      --gold-soft: #e8d5b5;
+      --dark: #1a1612;
+      --bg-warm: #191613;
+      --surface-card: #1f1b17;
+      --charcoal: #2d2720;
+      --brown: #5c4a32;
+      --muted: #8a7a68;
+      --text-muted: #bcb2a4;
+      --border: rgba(184,149,74,0.25);
+      --border-glow: rgba(212,175,122,0.25);
+      --shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+      --transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--warm-white);
+      color: var(--dark);
+      overflow-x: hidden;
+      cursor: none;
+      line-height: 1.5;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #1e1b17; }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+    /* Custom Cursor */
+    .cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, background 0.3s;
+    }
+    .cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border: 1px solid var(--gold); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, opacity 0.3s;
+      opacity: 0.6;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 26px 60px;
+      transition: var(--transition);
+    }
+    nav.scrolled {
+      background: rgba(26,22,18,0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(184,149,74,0.2);
+      padding: 16px 60px;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; font-weight: 300; letter-spacing: 0.12em;
+      color: var(--warm-white); text-decoration: none;
+    }
+    .nav-logo span { color: var(--gold); font-style: italic; }
+    .nav-links { display: flex; gap: 40px; list-style: none; }
+    .nav-links a {
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(253,250,245,0.8); text-decoration: none;
+      transition: color 0.3s; position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -6px; left: 0;
+      width: 0; height: 1px; background: var(--gold); transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-reserve {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--gold); padding: 10px 22px;
+      text-decoration: none; transition: var(--transition);
+    }
+    .nav-reserve:hover { background: var(--gold); color: var(--dark); }
+    .hamburger {
+      display: none; font-size: 1.4rem; cursor: none;
+      color: var(--warm-white); background: none; border: none;
+    }
+
+    /* ── HERO with background image ── */
+    .hero {
+      position: relative; height: 100vh; min-height: 680px;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.45)), url('https://images.unsplash.com/photo-1454944338482-a69bb95894b0?w=2000&auto=format') center/cover no-repeat;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 70% 40%, rgba(184,149,74,0.13) 0%, transparent 55%),
+        radial-gradient(ellipse at 20% 70%, rgba(92,74,50,0.22) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-grain {
+      position: absolute; inset: 0; opacity: 0.3; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    }
+    .hero-line {
+      position: absolute; left: 60px; top: 0; bottom: 0; width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold) 30%, var(--gold) 70%, transparent);
+      opacity: 0.3;
+    }
+    .hero-content { text-align: center; z-index: 2; padding: 0 20px; }
+    .hero-eyebrow {
+      font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 1s 0.3s forwards;
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 9vw, 8.5rem);
+      font-weight: 300; line-height: 0.95;
+      color: var(--warm-white); margin-bottom: 30px;
+      opacity: 0; animation: fadeUp 1s 0.55s forwards;
+    }
+    .hero-title em { font-style: italic; color: var(--gold-light); display: block; }
+    .hero-sub {
+      font-size: 0.78rem; letter-spacing: 0.18em;
+      color: rgba(253,250,245,0.5); text-transform: uppercase;
+      margin-bottom: 50px;
+      opacity: 0; animation: fadeUp 1s 0.8s forwards;
+    }
+    .hero-btns {
+      display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 1s 1.05s forwards;
+    }
+    .btn-primary {
+      background: var(--gold); border: none; color: var(--dark);
+      padding: 14px 32px; font-family: 'Jost', sans-serif;
+      font-size: 0.7rem; font-weight: 500; letter-spacing: 0.22em;
+      text-transform: uppercase; cursor: none;
+      border-radius: 40px; transition: var(--transition);
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 12px 20px -10px rgba(184,149,74,0.5); }
+    .btn-outline {
+      background: transparent; border: 1.5px solid var(--gold);
+      color: var(--gold); padding: 13px 32px;
+      font-family: 'Jost', sans-serif; font-size: 0.7rem;
+      font-weight: 500; letter-spacing: 0.22em; text-transform: uppercase;
+      cursor: none; border-radius: 40px; transition: var(--transition);
+      text-decoration: none; display: inline-block;
+    }
+    .btn-outline:hover { background: rgba(184,149,74,0.12); transform: translateY(-3px); }
+    .hero-scroll {
+      position: absolute; bottom: 36px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      opacity: 0; animation: fadeUp 1s 1.4s forwards;
+    }
+    .hero-scroll span { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
+    .scroll-bar {
+      width: 1px; height: 50px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    /* ── ABOUT ── */
+    .about {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 90px; align-items: center;
+      padding: 120px 60px; background: var(--warm-white);
+    }
+    .about-label { font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; }
+    .about-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
+      font-weight: 300; line-height: 1.1;
+      color: var(--charcoal); margin-bottom: 26px;
+    }
+    .about-title em { font-style: italic; color: var(--gold); }
+    .about-body { font-size: 0.88rem; line-height: 1.9; color: var(--muted); font-weight: 300; margin-bottom: 20px; }
+    .about-sig { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-style: italic; color: var(--brown); margin-top: 10px; }
+    .about-visual {
+      background: linear-gradient(135deg, #2d2318 0%, #5c4a32 50%, #8a6a3a 100%);
+      border-radius: 24px; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 420px; overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .about-visual img {
+      width: 100%; height: 100%; object-fit: cover;
+      position: absolute; top:0; left:0;
+      transition: transform 0.5s ease;
+    }
+    .about-visual:hover img { transform: scale(1.02); }
+    .about-border {
+      position: absolute; top: 18px; right: -18px; bottom: -18px; left: 18px;
+      border: 1px solid var(--border); border-radius: 24px; pointer-events: none;
+    }
+    .about-stats {
+      display: flex; gap: 40px; margin-top: 44px;
+      padding-top: 36px; border-top: 1px solid var(--border);
+    }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; font-weight: 300; color: var(--gold); }
+    .stat-label { font-size: 0.63rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+    /* ── MENU (with reliable product images) ── */
+    .menu { background: var(--charcoal); padding: 100px 60px; }
+    .menu-header { text-align: center; margin-bottom: 70px; }
+    .section-label { font-size: 0.62rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 300; color: var(--warm-white); line-height: 1;
+    }
+    .section-title em { font-style: italic; color: var(--gold-light); }
+    .gold-divider { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 14px auto; }
+    .gold-divider::before, .gold-divider::after { content: ''; width: 55px; height: 1px; background: var(--gold); opacity: 0.5; }
+    .gold-divider-dot { width: 4px; height: 4px; background: var(--gold); transform: rotate(45deg); }
+    .menu-tabs {
+      display: flex; justify-content: center; gap: 0;
+      margin-bottom: 60px;
+      border-bottom: 1px solid rgba(184,149,74,0.2);
+    }
+    .menu-tab {
+      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted); padding: 13px 32px; cursor: none;
+      border: none; border-bottom: 1px solid transparent;
+      margin-bottom: -1px; background: none;
+      font-family: 'Jost', sans-serif;
+      transition: color 0.3s, border-color 0.3s;
+    }
+    .menu-tab.active, .menu-tab:hover { color: var(--gold); border-bottom-color: var(--gold); }
+    .menu-panel { display: none; }
+    .menu-panel.active { display: block; }
+    .menu-grid-cards {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .menu-card {
+      background: var(--surface-card);
+      border-radius: 20px; overflow: hidden;
+      border: 1px solid rgba(184,149,74,0.15);
+      transition: var(--transition);
+    }
+    .menu-card:hover {
+      transform: translateY(-7px);
+      border-color: var(--gold);
+      box-shadow: 0 25px 35px -12px rgba(0,0,0,0.6);
+    }
+    .menu-card-img {
+      height: 210px; overflow: hidden;
+      background: #2a1f14;
+      position: relative;
+    }
+    .menu-card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .menu-card:hover .menu-card-img img { transform: scale(1.04); }
+    .menu-card-body { padding: 22px 24px; }
+    .item-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+    .item-name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--warm-white); }
+    .item-price {
+      font-weight: 600; font-size: 1rem; color: var(--gold);
+      border-top: 1px dashed rgba(184,149,74,0.3);
+      padding-top: 8px; margin-top: 10px; display: block;
+    }
+    .item-desc { font-size: 0.78rem; line-height: 1.7; color: var(--text-muted); font-weight: 300; }
+
+    /* ── SPECIALS / FEATURE ── */
+    .feature { background: var(--cream); padding: 120px 60px; position: relative; overflow: hidden; }
+    .feature::before {
+      content: 'LUMIÈRE';
+      position: absolute; font-family: 'Cormorant Garamond', serif;
+      font-size: 18vw; font-weight: 300; color: rgba(184,149,74,0.06);
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      white-space: nowrap; pointer-events: none;
+    }
+    .feature-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; position: relative; z-index: 1; }
+    .feature-card {
+      background: var(--dark); padding: 55px 48px;
+      border-radius: 4px; position: relative; overflow: hidden;
+    }
+    .feature-card::after {
+      content: ''; position: absolute;
+      bottom: -12px; right: -12px; width: 100%; height: 100%;
+      border: 1px solid var(--border); z-index: -1; border-radius: 4px;
+    }
+    .feature-badge {
+      font-size: 0.58rem; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); border: 1px solid var(--border);
+      display: inline-block; padding: 7px 16px; margin-bottom: 28px;
+    }
+    .feature-dish { font-family: 'Cormorant Garamond', serif; font-size: 2.3rem; font-weight: 300; color: var(--warm-white); line-height: 1.1; margin-bottom: 18px; }
+    .feature-dish em { font-style: italic; color: var(--gold-light); }
+    .feature-desc { font-size: 0.82rem; line-height: 1.85; color: var(--muted); font-weight: 300; margin-bottom: 32px; }
+    .feature-price-row { display: flex; align-items: center; gap: 22px; }
+    .feature-price { font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--gold); }
+    .feature-order {
+      font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--warm-white); border-bottom: 1px solid rgba(253,250,245,0.3);
+      padding-bottom: 2px; text-decoration: none; transition: color 0.3s, border-color 0.3s;
+    }
+    .feature-order:hover { color: var(--gold); border-color: var(--gold); }
+    .feature-list { list-style: none; margin-top: 32px; }
+    .feature-list li {
+      display: flex; align-items: center; gap: 16px;
+      padding: 15px 0; border-bottom: 1px solid var(--border);
+      font-size: 0.82rem; color: var(--brown); font-weight: 300;
+    }
+    .feature-list li::before { content: ''; width: 22px; height: 1px; background: var(--gold); flex-shrink: 0; }
+
+    /* ── TESTIMONIAL ── */
+    .testimonial-wrap { background: var(--bg-warm); padding: 80px 60px; }
+    .testimonial {
+      background: var(--surface-card); border-radius: 32px;
+      padding: 48px 56px; text-align: center; max-width: 820px;
+      margin: 0 auto; border: 1px solid rgba(184,149,74,0.2);
+      box-shadow: var(--shadow);
+    }
+    .quote-icon { font-size: 2rem; color: var(--gold); margin-bottom: 18px; }
+    .testimonial p { font-style: italic; font-size: 1.1rem; line-height: 1.7; color: var(--warm-white); }
+    .guest-name { margin-top: 20px; font-weight: 500; font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-soft); }
+
+    /* ── RESERVE + HOURS ── */
+    .reserve { background: var(--dark); display: grid; grid-template-columns: 1fr 1fr; padding: 0; }
+    .reserve-left { padding: 100px 80px; border-right: 1px solid rgba(184,149,74,0.15); }
+    .reserve-right { padding: 100px 80px; }
+    .reserve-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 300; color: var(--warm-white); line-height: 1.15; }
+    .reserve-title em { font-style: italic; color: var(--gold); }
+    .hours-grid { margin-top: 40px; }
+    .hours-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid rgba(184,149,74,0.1); }
+    .hours-day { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .hours-time { font-family: 'Cormorant Garamond', serif; font-size: 1rem; color: var(--warm-white); }
+    .form-group { margin-bottom: 26px; }
+    .form-label { font-size: 0.62rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 8px; }
+    .form-input, .form-select {
+      width: 100%; background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border-glow);
+      padding: 13px 16px; border-radius: 32px;
+      font-family: 'Jost', sans-serif; font-size: 0.86rem;
+      font-weight: 300; color: var(--warm-white);
+      outline: none; transition: border-color 0.3s, background 0.3s;
+      cursor: none;
+    }
+    .form-input:focus, .form-select:focus { border-color: var(--gold); background: rgba(184,149,74,0.08); }
+    .form-input::placeholder { color: rgba(138,122,104,0.4); }
+    .form-select option { background: var(--charcoal); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .form-submit {
+      width: 100%; background: var(--gold); color: var(--dark);
+      border: none; padding: 16px; border-radius: 40px;
+      font-family: 'Jost', sans-serif; font-size: 0.68rem;
+      letter-spacing: 0.28em; text-transform: uppercase;
+      cursor: none; transition: var(--transition); margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #090706; padding: 70px 60px 36px;
+      border-top: 1px solid rgba(184,149,74,0.15);
+    }
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 60px; padding-bottom: 50px;
+      border-bottom: 1px solid rgba(184,149,74,0.1);
+    }
+    .footer-logo { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--warm-white); margin-bottom: 16px; }
+    .footer-logo span { color: var(--gold); font-style: italic; }
+    .footer-tagline { font-size: 0.8rem; line-height: 1.85; color: var(--muted); font-weight: 300; max-width: 260px; }
+    .footer-col-title { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-soft); margin-bottom: 22px; font-weight: 500; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 11px; }
+    .footer-col ul li a { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; font-weight: 300; transition: color 0.3s; }
+    .footer-col ul li a:hover { color: var(--gold-light); }
+    .social-icons { display: flex; gap: 18px; margin-top: 18px; }
+    .social-icons a { font-size: 1.1rem; color: var(--text-muted); text-decoration: none; transition: color 0.3s; }
+    .social-icons a:hover { color: var(--gold); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; }
+    .footer-copy { font-size: 0.68rem; color: rgba(138,122,104,0.5); letter-spacing: 0.05em; }
+    .footer-links { display: flex; gap: 24px; }
+    .footer-links a { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(26px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.35; }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    }
+    @media (max-width: 900px) {
+      nav { padding: 20px 28px; }
+      nav.scrolled { padding: 14px 28px; }
+      .nav-links {
+        position: fixed; top: 0; right: -100%; width: 70%; height: 100vh;
+        background: rgba(14,12,10,0.97); backdrop-filter: blur(20px);
+        flex-direction: column; justify-content: center; align-items: center;
+        transition: 0.4s; gap: 2rem; z-index: 1001; padding: 0;
+      }
+      .nav-links.active { right: 0; }
+      .nav-links a { font-size: 0.9rem; letter-spacing: 0.15em; }
+      .hamburger { display: block; z-index: 1002; }
+      .nav-reserve { display: none; }
+      .hero-line { display: none; }
+      .about { grid-template-columns: 1fr; gap: 50px; padding: 80px 28px; }
+      .menu { padding: 80px 28px; }
+      .feature { padding: 80px 28px; }
+      .feature-inner { grid-template-columns: 1fr; gap: 50px; }
+      .testimonial-wrap { padding: 60px 28px; }
+      .testimonial { padding: 36px 28px; }
+      .reserve { grid-template-columns: 1fr; }
+      .reserve-left, .reserve-right { padding: 60px 28px; }
+      .reserve-left { border-right: none; border-bottom: 1px solid rgba(184,149,74,0.15); }
+      footer { padding: 60px 28px 30px; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
+      .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    }
+    @media (max-width: 550px) {
+      .hero-title { font-size: clamp(3rem, 12vw, 5rem); }
+      .hero-btns { flex-direction: column; align-items: center; }
+      .form-row { grid-template-columns: 1fr; }
+      .menu-tabs { overflow-x: auto; justify-content: flex-start; padding-bottom: 2px; }
+      .footer-top { grid-template-columns: 1fr; }
+      .about-stats { flex-wrap: wrap; gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav id="nav">
+    <a href="#home" class="nav-logo"><span>L</span>umière</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about">Our Story</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#specials">Specials</a></li>
+      <li><a href="#reserve">Reserve</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="#reserve" class="nav-reserve">Book a Table</a>
+  </nav>
+
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-grain"></div>
+    <div class="hero-line"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Est. 2019 &nbsp;·&nbsp; Paris Inspired &nbsp;·&nbsp; Mumbai</p>
+      <h1 class="hero-title">Where Every<br>Sip is <em>Poetry</em></h1>
+      <p class="hero-sub">A sanctuary of refined taste &amp; unhurried pleasure</p>
+      <div class="hero-btns">
+        <a href="#reserve" class="btn-primary">Reserve a Table</a>
+        <a href="#menu" class="btn-outline">Explore Menu</a>
+      </div>
+    </div>
+    <div class="hero-scroll"><div class="scroll-bar"></div><span>Scroll</span></div>
+  </section>
+
+  <section class="about" id="about">
+    <div>
+      <p class="about-label reveal">Our Philosophy</p>
+      <h2 class="about-title reveal reveal-delay-1">Crafted with<br><em>Intention,</em><br>Served with Soul</h2>
+      <p class="about-body reveal reveal-delay-2">Lumière was born from a simple belief — that a café can be more than a coffee stop. It can be a pause, a breath, a place where time softens and every detail is considered. Our sourcing is obsessive, our preparation is unhurried, and our welcome is always warm.</p>
+      <p class="about-body reveal reveal-delay-2">From single-origin espresso pulled with precision to pastries made fresh before dawn, we bring the art of the Parisian salon to the heart of Mumbai.</p>
+      <p class="about-sig reveal reveal-delay-3">— Chef Isabelle Laurent</p>
+      <div class="about-stats reveal"><div><div class="stat-num">12</div><div class="stat-label">Origin Coffees</div></div><div><div class="stat-num">47</div><div class="stat-label">Seasonal Dishes</div></div><div><div class="stat-num">5★</div><div class="stat-label">Rated Experience</div></div></div>
+    </div>
+    <div style="position:relative;" class="reveal reveal-delay-1">
+      <div class="about-visual"><img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&auto=format" alt="Lumière cafe interior" loading="lazy"></div>
+      <div class="about-border"></div>
+    </div>
+  </section>
+
+  <!-- MENU SECTION WITH ALL WORKING IMAGES -->
+  <section class="menu" id="menu">
+    <div class="menu-header">
+      <p class="section-label reveal">Curated Selection</p>
+      <div class="gold-divider reveal"><div class="gold-divider-dot"></div></div>
+      <h2 class="section-title reveal"><em>The</em> Menu</h2>
+    </div>
+    <div class="menu-tabs" id="menuTabs">
+      <button class="menu-tab active" data-tab="coffee">Coffee &amp; Tea</button>
+      <button class="menu-tab" data-tab="breakfast">Breakfast</button>
+      <button class="menu-tab" data-tab="lunch">Lunch</button>
+      <button class="menu-tab" data-tab="patisserie">Pâtisserie</button>
+    </div>
+
+    <div class="menu-panel active" id="tab-coffee">
+      <div class="menu-grid-cards">
+        <div class="menu-card reveal"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?w=600&auto=format" alt="Grand Crème"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Grand Crème</span></div><p class="item-desc">Double ristretto, steamed whole milk, a whisper of vanilla — our signature morning ritual.</p><span class="item-price">₹380</span></div></div>
+        <div class="menu-card reveal reveal-delay-1"><div class="menu-card-img"><img src="data:image/jpeg;base64,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" alt="Ethiopian Pour Over"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Ethiopian Pour Over</span></div><p class="item-desc">Yirgacheffe single origin, bright and floral with a luminous jasmine finish.</p><span class="item-price">₹420</span></div></div>
+        <div class="menu-card reveal reveal-delay-2"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=600&auto=format" alt="Café Glacé"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Café Glacé</span></div><p class="item-desc">Cold-steeped espresso concentrate, oat milk, demerara syrup over hand-chipped ice.</p><span class="item-price">₹450</span></div></div>
+        <div class="menu-card reveal"><div class="menu-card-img"><img src="data:image/jpeg;base64,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" alt="Darjeeling"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Darjeeling First Flush</span></div><p class="item-desc">Single estate, spring harvest. Delicate muscatel notes, served in fine porcelain.</p><span class="item-price">₹340</span></div></div>
+        <div class="menu-card reveal reveal-delay-1"><div class="menu-card-img"><img src="data:image/jpeg;base64,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" alt="Matcha"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Matcha Ceremonial</span></div><p class="item-desc">Grade A ceremonial matcha, whisked tableside with warm oat or whole milk.</p><span class="item-price">₹480</span></div></div>
+        <div class="menu-card reveal reveal-delay-2"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=600&auto=format" alt="Spiced Chai"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Spiced Chai d'Or</span></div><p class="item-desc">Our homage to Mumbai — house-blended spices, Assam leaf, condensed milk foam.</p><span class="item-price">₹320</span></div></div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="tab-breakfast">
+      <div class="menu-grid-cards">
+        <div class="menu-card reveal"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1600374007032-5ca180a1624d?w=600&auto=format" alt="Eggs Benedict"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Œufs Bénédicte</span></div><p class="item-desc">Soft-poached eggs, smoked salmon, brioche, hollandaise with tarragon oil.</p><span class="item-price">₹680</span></div></div>
+        <div class="menu-card reveal reveal-delay-1"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?w=600&auto=format" alt="Mushroom Tartine"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Tartine Forestière</span></div><p class="item-desc">Sourdough, wild mushrooms, whipped ricotta, truffle shavings, micro herbs.</p><span class="item-price">₹560</span></div></div>
+        <div class="menu-card reveal reveal-delay-2"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1521305916504-4a1121188589?w=600&auto=format" alt="Granola"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Granola Lumière</span></div><p class="item-desc">House toasted oats, rose-honey, seasonal compote, labneh, edible gold.</p><span class="item-price">₹480</span></div></div>
+        <div class="menu-card reveal"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1551024506-0bccd828d307?w=600&auto=format" alt="Crêpes"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Crêpes Suzette</span></div><p class="item-desc">Classic French thin crêpes, orange beurre blanc, caramelised peel, Grand Marnier flame.</p><span class="item-price">₹620</span></div></div>
+        <div class="menu-card reveal reveal-delay-1"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1600240644455-3edc55c375fe?w=600&auto=format" alt="Avocado Toast"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Avocado Royale</span></div><p class="item-desc">Hass avocado, dukkah, heirloom tomato, burrata, toasted rye, lemon dressing.</p><span class="item-price">₹640</span></div></div>
+        <div class="menu-card reveal reveal-delay-2"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format" alt="Pastry Basket"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Viennoiserie Basket</span></div><p class="item-desc">Croissant, pain au chocolat, kouign-amann, cultured butter &amp; house jam.</p><span class="item-price">₹520</span></div></div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="tab-lunch">
+      <div class="menu-grid-cards">
+        <div class="menu-card reveal"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&auto=format" alt="Salad Nicoise"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Salade Niçoise</span></div><p class="item-desc">Line-caught tuna, haricots verts, quail egg, anchovy vinaigrette, olives de Provence.</p><span class="item-price">₹780</span></div></div>
+        <div class="menu-card reveal reveal-delay-1"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=600&auto=format" alt="Croque Monsieur"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Croque Monsieur Truffé</span></div><p class="item-desc">Brioche, jambon de Paris, Comté béchamel, black truffle, golden-baked.</p><span class="item-price">₹720</span></div></div>
+        <div class="menu-card reveal reveal-delay-2"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&auto=format" alt="Soup of the day"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Soupe du Jour</span></div><p class="item-desc">Chef's daily creation, seasonal produce, freshly baked bread on the side.</p><span class="item-price">₹380</span></div></div>
+        <div class="menu-card reveal"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1555444971-2db591c6f2d1?w=600&auto=format" alt="Quiche"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Quiche Lorraine</span></div><p class="item-desc">Butter pastry, lardons, Gruyère, silken egg custard, side of dressed greens.</p><span class="item-price">₹640</span></div></div>
+        <div class="menu-card reveal reveal-delay-1"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1548940740-204a7bf3a9f3?w=600&auto=format" alt="Mezze platter"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Mezze Lumière</span></div><p class="item-desc">Hummus, muhammara, labneh, warm pita, seasonal crudités, extra virgin olive oil.</p><span class="item-price">₹820</span></div></div>
+        <div class="menu-card reveal reveal-delay-2"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?w=600&auto=format" alt="Pasta"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Pasta du Marché</span></div><p class="item-desc">House-made tagliatelle, market vegetables, aged Parmigiano, brown butter, sage.</p><span class="item-price">₹760</span></div></div>
+      </div>
+    </div>
+
+    <div class="menu-panel" id="tab-patisserie">
+      <div class="menu-grid-cards">
+        <div class="menu-card reveal"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1607357184600-8743e5bc410b?w=600&auto=format" alt="Lemon tart"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Tarte au Citron</span></div><p class="item-desc">Pâte sablée, lemon curd, torched Italian meringue, candied zest.</p><span class="item-price">₹440</span></div></div>
+        <div class="menu-card reveal reveal-delay-1"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1574084346557-ee8a5e129d66?w=600&auto=format" alt="Eclair"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Éclair Caramel Beurre Salé</span></div><p class="item-desc">Choux pastry, salted caramel crème pâtissière, caramel glaze, fleur de sel.</p><span class="item-price">₹380</span></div></div>
+        <div class="menu-card reveal reveal-delay-2"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1587672454301-c4335ecf6a9b?w=600&auto=format" alt="Opera cake"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Opera Cake</span></div><p class="item-desc">Joconde sponge, coffee buttercream, dark chocolate ganache — a Parisian icon.</p><span class="item-price">₹520</span></div></div>
+        <div class="menu-card reveal"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=600&auto=format" alt="Macarons"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Macaron Assortiment</span></div><p class="item-desc">Six house macarons: rose, pistachio, blackcurrant, salted caramel, vanilla, violet.</p><span class="item-price">₹480</span></div></div>
+        <div class="menu-card reveal reveal-delay-1"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1464305795204-6f5bbfc7fb81?w=600&auto=format" alt="Millefeuille"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Millefeuille Vanille</span></div><p class="item-desc">Feuilletage caramelisé, Madagascar vanilla crème, fondant icing, gold leaf.</p><span class="item-price">₹460</span></div></div>
+        <div class="menu-card reveal reveal-delay-2"><div class="menu-card-img"><img src="https://images.unsplash.com/photo-1579952363873-27f3bade9f55?w=600&auto=format" alt="Chocolate fondant"></div><div class="menu-card-body"><div class="item-top"><span class="item-name">Fondant au Chocolat</span></div><p class="item-desc">Warm 72% Valrhona chocolate heart, fleur de sel, Madagascan vanilla ice cream.</p><span class="item-price">₹540</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="feature" id="specials">
+    <div class="feature-inner">
+      <div class="feature-visual reveal">
+        <div class="feature-card">
+          <div class="feature-badge">Chef's Weekly Special</div>
+          <h3 class="feature-dish">Truffle Ricotta<br><em>Crostini</em></h3>
+          <p class="feature-desc">Slow-toasted Poilâne sourdough crowned with whipped lemon ricotta, shaved black truffle, wild arugula, and a 12-year aged balsamic reduction. A study in restraint and intensity.</p>
+          <div class="feature-price-row"><span class="feature-price">₹980</span><a href="#reserve" class="feature-order">Reserve &amp; Pre-Order →</a></div>
+        </div>
+      </div>
+      <div class="feature-text">
+        <p class="section-label reveal">What Sets Us Apart</p>
+        <h2 class="about-title reveal reveal-delay-1" style="color:var(--charcoal)">Details That<br>Make <em>All</em><br>The Difference</h2>
+        <ul class="feature-list reveal reveal-delay-2">
+          <li>Organic, single-origin beans roasted weekly in-house</li>
+          <li>All pastry made fresh daily before 6 AM</li>
+          <li>Seasonal menu changes every fortnight</li>
+          <li>Artisan ceramics by local Mumbai potters</li>
+          <li>Background music curated by a jazz pianist</li>
+          <li>Zero single-use plastics since 2021</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="testimonial-wrap">
+    <div class="testimonial reveal">
+      <div class="quote-icon"><i class="fas fa-quote-right"></i></div>
+      <p>"One of the most transcendent café experiences in the city. Every detail — from the single-origin pour-over to the handmade ceramics — radiates intention and warmth. A true sanctuary."</p>
+      <div class="guest-name">— Condé Nast Traveller India, 2025</div>
+    </div>
+  </div>
+
+  <section class="reserve" id="reserve">
+    <div class="reserve-left">
+      <p class="section-label reveal">Visit Us</p>
+      <h2 class="reserve-title reveal reveal-delay-1">Opening<br><em>Hours</em></h2>
+      <div class="hours-grid reveal reveal-delay-2">
+        <div class="hours-row"><span class="hours-day">Monday — Friday</span><span class="hours-time">7:30 — 22:00</span></div>
+        <div class="hours-row"><span class="hours-day">Saturday</span><span class="hours-time">8:00 — 23:00</span></div>
+        <div class="hours-row"><span class="hours-day">Sunday</span><span class="hours-time">9:00 — 21:00</span></div>
+        <div class="hours-row"><span class="hours-day">Public Holidays</span><span class="hours-time">10:00 — 20:00</span></div>
+      </div>
+      <div style="margin-top:40px;" class="reveal">
+        <p class="form-label">Location</p>
+        <p style="color:var(--muted);font-size:0.85rem;font-weight:300;line-height:1.9;">14, Napean Sea Road<br>Malabar Hill, Mumbai 400 006<br>Maharashtra, India</p>
+        <p style="margin-top:20px;color:var(--muted);font-size:0.82rem;font-weight:300;line-height:1.9;"><i class="fas fa-phone-alt" style="color:var(--gold);margin-right:8px;"></i>+91 22 2233 4455<br><i class="fas fa-envelope" style="color:var(--gold);margin-right:8px;"></i>hello@lumierecafe.in</p>
+      </div>
+    </div>
+    <div class="reserve-right">
+      <p class="section-label reveal">Reservations</p>
+      <h2 class="reserve-title reveal reveal-delay-1">Book Your<br><em>Table</em></h2>
+      <p style="color:var(--muted);font-size:0.8rem;margin-top:14px;font-weight:300;line-height:1.7;" class="reveal reveal-delay-1">Intimate seating — reservations recommended 2 days in advance.</p>
+      <div style="margin-top:36px;" class="reveal reveal-delay-2" id="reserveForm">
+        <div class="form-row"><div class="form-group"><label class="form-label">Full Name</label><input type="text" class="form-input" id="resName" placeholder="Isabelle Laurent" /></div><div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="resEmail" placeholder="hello@example.com" /></div></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Date</label><input type="date" class="form-input" id="resDate" /></div><div class="form-group"><label class="form-label">Time</label><select class="form-select form-input" id="resTime"><option>08:00</option><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option><option>19:00</option><option>20:00</option><option>21:00</option></select></div></div>
+        <div class="form-row"><div class="form-group"><label class="form-label">Guests</label><select class="form-select form-input" id="resGuests"><option>1 guest</option><option selected>2 guests</option><option>3 guests</option><option>4 guests</option><option>5 guests</option><option>6 guests</option><option>7+ (call us)</option></select></div><div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="resPhone" placeholder="+91 98765 43210" /></div></div>
+        <div class="form-group"><label class="form-label">Special Requests</label><input type="text" class="form-input" id="resNotes" placeholder="Dietary needs, occasion, seating preference…" /></div>
+        <button class="form-submit" id="submitBtn">Confirm Reservation</button>
+      </div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <div class="footer-top">
+      <div><div class="footer-logo"><span>L</span>umière</div><p class="footer-tagline">A Parisian-inspired café sanctuary in the heart of Mumbai — where quiet luxury meets the art of everyday pleasure.</p><div class="social-icons"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-tripadvisor"></i></a></div></div>
+      <div class="footer-col"><p class="footer-col-title">Navigate</p><ul><li><a href="#home">Home</a></li><li><a href="#about">Our Story</a></li><li><a href="#menu">Menu</a></li><li><a href="#specials">Specials</a></li><li><a href="#reserve">Reserve</a></li></ul></div>
+      <div class="footer-col"><p class="footer-col-title">Experience</p><ul><li><a href="#">Private Events</a></li><li><a href="#">Coffee Tastings</a></li><li><a href="#">Pastry Workshop</a></li><li><a href="#">Gift Cards</a></li><li><a href="#">Catering</a></li></ul></div>
+      <div class="footer-col"><p class="footer-col-title">Contact</p><ul><li><a href="tel:+912222334455">+91 22 2233 4455</a></li><li><a href="mailto:hello@lumierecafe.in">hello@lumierecafe.in</a></li><li><a href="#">Malabar Hill, Mumbai</a></li><li><a href="#">Press Inquiries</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p class="footer-copy">© 2025 Lumière Café. All rights reserved.</p><div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Sitemap</a></div></div>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx + 'px'; cursor.style.top = my + 'px'; });
+    (function animRing() { rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(animRing); })();
+    document.querySelectorAll('a, button, input, select, .menu-tab, .menu-card').forEach(el => { el.addEventListener('mouseenter', () => { cursor.style.width = '6px'; cursor.style.height = '6px'; ring.style.width = '52px'; ring.style.height = '52px'; ring.style.opacity = '1'; }); el.addEventListener('mouseleave', () => { cursor.style.width = '10px'; cursor.style.height = '10px'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.opacity = '0.6'; }); });
+
+    window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60); });
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    hamburger.addEventListener('click', () => { navLinks.classList.toggle('active'); const icon = hamburger.querySelector('i'); icon.classList.toggle('fa-bars'); icon.classList.toggle('fa-times'); });
+    document.querySelectorAll('.nav-links a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('active'); const icon = hamburger.querySelector('i'); icon.classList.add('fa-bars'); icon.classList.remove('fa-times'); }); });
+
+    document.getElementById('menuTabs').addEventListener('click', e => { if (!e.target.classList.contains('menu-tab')) return; document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active')); document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active')); e.target.classList.add('active'); document.getElementById('tab-' + e.target.dataset.tab).classList.add('active'); document.querySelectorAll('#tab-' + e.target.dataset.tab + ' .reveal').forEach(el => { el.classList.remove('visible'); setTimeout(() => revealObserver.observe(el), 50); }); });
+
+    const revealObserver = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObserver.unobserve(entry.target); } }); }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    document.getElementById('submitBtn').addEventListener('click', () => { const name = document.getElementById('resName').value.trim(); const email = document.getElementById('resEmail').value.trim(); const date = document.getElementById('resDate').value; if (!name || !email || !date) { alert('Please fill in your name, email, and date.'); return; } if (!email.includes('@')) { alert('Please enter a valid email address.'); return; } const btn = document.getElementById('submitBtn'); btn.textContent = 'Reservation Confirmed ✓'; btn.style.background = '#4a7a48'; btn.style.color = '#fdfaf5'; setTimeout(() => { btn.textContent = 'Confirm Reservation'; btn.style.background = ''; btn.style.color = ''; document.getElementById('reserveForm').querySelectorAll('input').forEach(i => i.value = ''); }, 4000); });
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => { a.addEventListener('click', function(e) { const target = document.querySelector(this.getAttribute('href')); if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); } }); });
+  </script>
+</body>
+</html>
